@@ -16,7 +16,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         final Map<String, dynamic> user = {
           "email": "user@gmail.com",
           "nombre": "mariobros",
-          "saldo": 12000,
+          "saldo": 125000,
         };
 
         emit(UserSuccess(user));
