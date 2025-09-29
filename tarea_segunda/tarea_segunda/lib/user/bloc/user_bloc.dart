@@ -18,24 +18,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           Uri.parse('https://jsonplaceholder.typicode.com/users/2'),
         );
 
-        log('HTTP Status Code: ${response.statusCode}', name: 'andrw');
-
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body);
           final name = data['name'];
 
-          log('User name loaded: $name', name: 'andrw');
-
           emit(UserLoaded(name));
         } else {
-          log(
-            'Error: ${response.statusCode} - ${response.body}',
-            name: 'UserBloc',
-          );
           emit(UserError());
         }
       } catch (e) {
-        log('Request failed: $e', name: 'andrw');
         emit(UserError());
       }
     });
