@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
+import 'dart:convert';
 import 'package:tarea_segunda/models/userModel.dart';
 
 part 'home_state.dart';
@@ -20,8 +21,9 @@ class HomeCubit extends Cubit<HomeState> {
         emit(HomeError());
         throw Exception('Failed to load data');
       }
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      final user = User.fromJson(data);
 
-      final user = User.fromJson(response as Map<String, dynamic>);
 
       emit(HomeSuccess(user: user));
     } catch (e) {
