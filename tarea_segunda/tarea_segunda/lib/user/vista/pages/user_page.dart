@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tarea_segunda/login/vista/pages/login_pages.dart';
-
-import '../../bloc/user_bloc.dart';
-import '../../bloc/user_event.dart';
-import '../../bloc/user_state.dart';
+import 'package:tarea_segunda/user/cubit/home_cubit.dart';
 
 class UserPage extends StatelessWidget {
   const UserPage({super.key});
@@ -12,7 +9,7 @@ class UserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => UserBloc()..add(UserFetchData()),
+      create: (_) => HomeCubit()..fetchData(),
       child: Scaffold(
         appBar: AppBar(
 
@@ -59,9 +56,9 @@ class UserPage extends StatelessWidget {
               ),
 
               // BlocBuilder
-              BlocBuilder<UserBloc, UserState>(
+              BlocBuilder<HomeCubit, HomeState>(
                 builder: (context, state) {
-                  if (state is UserLoading) {
+                  if (state is HomeLoading) {
                     return Text(
                       'Cargando...',
                       style: TextStyle(
@@ -69,7 +66,7 @@ class UserPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     );
-                  } else if (state is UserError) {
+                  } else if (state is HomeError) {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -82,28 +79,18 @@ class UserPage extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () {
-                            context.read<UserBloc>().add(UserFetchData());
-                          },
-                          child: Text('Reintentar'),
-                        ),
+                        
                       ],
                     );
-                  } else if (state is UserLoaded) {
+                  } else if (state is HomeSuccess) {
                     return Text(
-                      state.name,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      'Hola, ${state.user.name}',
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     );
+                  } else {
+                    return SizedBox.shrink();
                   }
 
-                  return Text(
-                    'No data',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  );
                 },
               ),
 
